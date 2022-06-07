@@ -1,0 +1,198 @@
+﻿<Window x:Class="Diplom.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Diplom"
+        mc:Ignorable="d"
+        UseLayoutRounding="True"
+        KeyDown="Grid_KeyDown"
+        Background="LightGray"
+        Title="Преобразование изобрежений"
+        MinHeight="300" MinWidth="360"
+        Height="500" Width="650">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Name="menu_file" Header="Файл">
+                <MenuItem Name="open_img" Header="Открыть новое изображение" InputGestureText="Ctrl+O" Click="open_img_Click"/>
+                <MenuItem Name="save_img" IsEnabled="False" Header="Сохранить текущее изображение как..." InputGestureText="Ctrl+S" Click="save_img_Click"/>
+                <Separator></Separator>
+                <MenuItem Name="close_img" IsEnabled="False" Header="Закрыть текущее изображение" InputGestureText="Delete" Click="close_img_Click"/>
+            </MenuItem>
+            
+            
+            <MenuItem Name="menu_transform" IsEnabled="False" Header="Преобразование">
+                <MenuItem Name="Fourier_img"  Header="Фурье">
+                    <MenuItem ToolTip="В центре находятся коэффициенты при низких частотах изображения, чем ближе точка к краю, тем более высокую частоту она характеризует" Click="freq_img_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Показать разложение на частоты (коэффициент яркости k = "/>
+                                <TextBox x:Name="txt_Fourier_freq_k" Text="3"/>
+                                <TextBlock Text=" )"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    
+                    <MenuItem Name="change_freq_high" Click="change_freq_img_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Умножить высокие (n &lt; "/>
+                                <TextBox Name="txt_change_high_freq_n" Text="10"/>
+                                <TextBlock Text=") частоты на коэффициент k = "/>
+                                <TextBox Name="txt_change_high_freq_k" Text="1,5"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem.ToolTip>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Увеличение высоких частот повышает резкость изображения"/>
+                                <TextBlock Text="Уменьшение высоких частот понижает резкость изображения"/>
+                            </StackPanel>
+                        </MenuItem.ToolTip>
+                    </MenuItem>
+                    
+                    <MenuItem Click="change_freq_img_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Умножить низкие (n &gt; "/>
+                                <TextBox Name="txt_change_low_freq_n" Text="10"/>
+                                <TextBlock Text=") частоты на коэффициент k = "/>
+                                <TextBox Name="txt_change_low_freq_k" Text="1,5"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem.ToolTip>
+                            <StackPanel Orientation="Vertical">
+                                <TextBlock Text="Увеличение низких частот понижает резкость изображения"/>
+                                <TextBlock Text="Уменьшение низких частот повышает резкость изображения"/>
+                            </StackPanel>
+                        </MenuItem.ToolTip>
+                    </MenuItem>
+                </MenuItem>
+                <Separator></Separator>
+                
+                <MenuItem Name="blur_img"  Header="Уменьшить резкость">
+                    <MenuItem Name="blur_img_box" Click="blur_img_box_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Box-фильтром "/>
+                                <TextBox x:Name="txt_box_n" Text="1"/>
+                                <TextBlock Text=" раз, ядром k×k, где k = "/>
+                                <TextBox x:Name="txt_box_k" Text="5"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="          1/9 1/9 1/9" HorizontalAlignment="Right" Height="25"/>
+                                <TextBlock Text="Для k=3   1/9 1/9 1/9" HorizontalAlignment="Right" Height="25"/>
+                                <TextBlock Text="          1/9 1/9 1/9" HorizontalAlignment="Right" Height="25"/>
+                            </StackPanel>
+                        </MenuItem.ToolTip>
+                    </MenuItem>
+                    
+                    <MenuItem Name="blur_img_gauss" Click="blur_img_gauss_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Гауссовским фильтром "/>
+                                <TextBox x:Name="txt_Gauss_n" Text="1"/>
+                                <TextBlock Text=" раз, σ = "/>
+                                <TextBox x:Name="txt_Gauss_sgm" Text="0,66"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    
+                    <MenuItem Name="blur_img_median" Click="blur_img_median_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Медианным фильтром "/>
+                                <TextBox x:Name="txt_median_n" Text="1"/>
+                                <TextBlock Text=" раз"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </MenuItem>
+                
+                
+                <MenuItem Name="sharp_img" Header="Увеличить резкость">
+                    <MenuItem Name="sharp_img_filter1" Click="sharp_img_filter1_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Фильтром резкости 1 "/>
+                                <TextBox x:Name="txt_sharp_filter1_n" Text="1"/>
+                                <TextBlock Text=" раз"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text="-0.1 -0.2 -0.1" Height="30"/>
+                                <TextBlock Text="-0.2  2.2 -0.2" Height="30"/>
+                                <TextBlock Text="-0.1 -0.2 -0.1" Height="30"/>
+                            </StackPanel>
+                        </MenuItem.ToolTip>
+                    </MenuItem>
+                    
+                    <MenuItem Name="sharp_img_filter2" Click="sharp_img_filter2_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Фильтром резкости 2 "/>
+                                <TextBox x:Name="txt_sharp_filter2_n" Text="1"/>
+                                <TextBlock Text=" раз"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                        <MenuItem.ToolTip>
+                            <StackPanel>
+                                <TextBlock Text=" 0 -1  0" Height="20"/>
+                                <TextBlock Text="-1  5 -1" Height="20"/>
+                                <TextBlock Text=" 0 -1  0" Height="20"/>
+                            </StackPanel>
+                        </MenuItem.ToolTip>
+                    </MenuItem>
+                    <MenuItem Name="add_Laplas_img"  Header="Наложить лапласовский фильтр"  ToolTip="Усилить высокочастотные детали изображения, полученные в результате обработки лапласовским фильтром" Click="add_Laplas_img_Click"/>
+                </MenuItem>
+                
+                
+                <MenuItem Name="Laplas_img"  Header="Лапласовский фильтр" Click="Laplas_img_Click">
+                    <MenuItem.ToolTip>
+                        <StackPanel>
+                            <TextBlock Text="Выделяет высокие частоты изображения"/>
+                            <TextBlock Text=" 0 -1  0 " Height="20"/>
+                            <TextBlock Text="-1  4 -1 " Height="20"/>
+                            <TextBlock Text=" 0 -1  0 " Height="20"/>
+                        </StackPanel>
+                    </MenuItem.ToolTip>
+                </MenuItem>
+                
+                <MenuItem Name="Embossing_img" Header="Тиснение" Click="Embossing_img_Click">
+                    <MenuItem.ToolTip>
+                        <StackPanel>
+                            <TextBlock Text=" 0  1  0" Height="20"/>
+                            <TextBlock Text="1  0  -1" Height="20"/>
+                            <TextBlock Text=" 0 -1  0" Height="20"/>
+                        </StackPanel>
+                    </MenuItem.ToolTip>
+                </MenuItem>
+                <Separator/>
+                
+                <MenuItem Name="Gray_img"  Header="Обесцветить" ToolTip="Оттенки серого" Click="Gray_img_Click" />
+            </MenuItem>
+        </Menu>
+
+        <Image x:Name="_img_now" UseLayoutRounding="True" Grid.Row="1" Margin="5" MouseLeftButtonDown="_img_now_MouseLeftButtonDown">
+            <Image.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Закрыть" Click="close_img_Click"/>
+                </ContextMenu>
+            </Image.ContextMenu>
+        </Image>
+
+        <StackPanel Orientation="Vertical" Margin="5,5,5,5" Grid.Row="2">
+            <Grid>
+                <Button x:Name="button_last_img" IsEnabled="False" Content="Предыдущее изображение" HorizontalAlignment="Left" Click="button_last_img_Click"/>
+                <Button x:Name="button_next_img" IsEnabled="False" Content="Следующее изображение" HorizontalAlignment="Right" Click="button_next_img_Click"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
