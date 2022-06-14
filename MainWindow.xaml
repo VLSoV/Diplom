@@ -8,7 +8,7 @@
         UseLayoutRounding="True"
         KeyDown="Grid_KeyDown"
         Background="LightGray"
-        Title="Преобразование изобрежений"
+        Title="Преобразование изображений"
         MinHeight="300" MinWidth="360"
         Height="500" Width="650">
     <Grid>

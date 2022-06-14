@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Diplom"
         mc:Ignorable="d"
         UseLayoutRounding="True"
+        MinHeight="450" MinWidth="800"
         Title="" Height="450" Width="800" WindowStyle="ToolWindow">
     <Grid x:Name="root">
         <Image x:Name="_img" MouseWheel="img_MouseWheel" MouseLeftButtonDown="_img_MouseLeftButtonDown" MouseLeftButtonUp="_img_MouseLeftButtonUp" MouseMove="_img_MouseMove">
