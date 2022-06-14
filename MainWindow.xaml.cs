@@ -32,8 +32,8 @@ namespace Diplom
             worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_RunWorkerCompleted);
         }
 
-        int _index_now = -1;
-        List<Image> _images = new List<Image>();
+        private int _index_now = -1;
+        private List<Image> _images = new List<Image>();
 
         private void open_img_Click(object sender, RoutedEventArgs e)
         {
@@ -59,7 +59,7 @@ namespace Diplom
                     jpegBitmapEncoder.Save(fileStream);
             }
         }
-        void add_img(BitmapSource bitmapSource)
+        private void add_img(BitmapSource bitmapSource)
         {
             _index_now++;
             _images.Insert(_index_now, new Image());
@@ -81,7 +81,7 @@ namespace Diplom
             check_index();
         }
 
-        void check_index()
+        private void check_index()
         {
             if (_index_now < 1)
                 button_last_img.IsEnabled = false;
@@ -91,7 +91,7 @@ namespace Diplom
                 button_next_img.IsEnabled = false;
             else button_next_img.IsEnabled = true;
         }
-        bool check_count_is_not_null()
+        private bool check_count_is_not_null()
         {
             if (_images.Count == 0)
             {
@@ -159,7 +159,7 @@ namespace Diplom
         }
 
         BackgroundWorker worker = new BackgroundWorker() { WorkerSupportsCancellation = true, WorkerReportsProgress = true };
-        void worker_DoWork(object sender, DoWorkEventArgs e)
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             System.Diagnostics.Stopwatch myStopwatch = new System.Diagnostics.Stopwatch();
             myStopwatch.Start();
@@ -177,10 +177,10 @@ namespace Diplom
             Finish();
         }
 
-        string transform;
-        double[] Params;
-        WindowProgressBar wpb;
-        ImgTransform imgTransform;
+        private string transform;
+        private double[] Params;
+        private WindowProgressBar wpb;
+        private ImgTransform imgTransform;
         private void Start(string _transform)
         {
             transform = _transform;
@@ -204,7 +204,7 @@ namespace Diplom
                     break;
 
                 case "change_freq":
-                    imgTransform.change_freq((int)Params[0], Params[1], (int)Params[2]);
+                    imgTransform.change_freq((int)Params[0], Params[1], (int)Params[2]);//r, k, freq (0 - low, 1 - high)
                     break;
 
                 case "Box":
@@ -282,14 +282,24 @@ namespace Diplom
         {
             try
             {
-                int n = Convert.ToInt32(txt_change_low_freq_n.Text);
-                if (n < 0) throw new Exception("n less 0");
-                double k = Convert.ToDouble(txt_change_low_freq_k.Text);
-                if (k < 0) throw new Exception("k less 0");
-
+                int n;
+                double k;
                 int is_high;
-                if ((sender as MenuItem).Name == change_freq_high.Name) is_high = 1;
-                else is_high = 0;
+                if ((sender as MenuItem).Name == change_freq_high.Name)
+                {
+                    is_high = 1;
+                    n = Convert.ToInt32(txt_change_high_freq_n.Text);
+                    k = Convert.ToDouble(txt_change_high_freq_k.Text);
+                }
+                else
+                {
+                    is_high = 0;
+                    n = Convert.ToInt32(txt_change_low_freq_n.Text);
+                    k = Convert.ToDouble(txt_change_low_freq_k.Text);
+                }
+
+                if (n < 0) throw new Exception("n less 0");
+                if (k < 0) throw new Exception("k less 0");
 
                 Params = new double[] { n, k, is_high };
                 Start("change_freq");
@@ -297,7 +307,7 @@ namespace Diplom
             catch (Exception ex)
             {
                 if (ex.Message == "n less 0")
-                    MessageBox.Show("Значение k не должно быть меньше нуля", "Введены некорректные данные", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Значение n не должно быть меньше нуля", "Введены некорректные данные", MessageBoxButton.OK, MessageBoxImage.Error);
                 else if (ex.Message == "k less 0")
                     MessageBox.Show("Коэффициент k не должен быть меньше нуля", "Введены некорректные данные", MessageBoxButton.OK, MessageBoxImage.Error);
                 else

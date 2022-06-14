@@ -119,10 +119,10 @@ namespace Diplom
             {
                 for (int y = 0; y < _height/2; y++)
                 {
-                    Y[x + _width / 2, y + _height / 2] = Math.Log(1 + Math.Abs(complices[x, y].Real)) * 256*k_brightness;
-                    Y[-x + _width / 2, y + _height / 2] = Math.Log(1 + Math.Abs(complices[n-1 - x, y].Real)) * 256*k_brightness;
-                    Y[x + _width / 2, -y + _height / 2] = Math.Log(1 + Math.Abs(complices[x, n-1 - y].Real)) * 256*k_brightness;
-                    Y[-x + _width / 2, -y + _height / 2] = Math.Log(1 + Math.Abs(complices[n-1 - x, n-1 - y].Real)) * 256*k_brightness;
+                    Y[x + _width / 2, y + _height / 2]   = Math.Log(1 + Math.Abs(complices[x, y].Magnitude)) * 256*k_brightness;
+                    Y[-x + _width / 2, y + _height / 2]  = Math.Log(1 + Math.Abs(complices[n-1 - x, y].Magnitude)) * 256*k_brightness;
+                    Y[x + _width / 2, -y + _height / 2]  = Math.Log(1 + Math.Abs(complices[x, n-1 - y].Magnitude)) * 256*k_brightness;
+                    Y[-x + _width / 2, -y + _height / 2] = Math.Log(1 + Math.Abs(complices[n-1 - x, n-1 - y].Magnitude)) * 256*k_brightness;
                 }
             }
         }
