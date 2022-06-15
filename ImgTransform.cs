@@ -187,19 +187,19 @@ namespace Diplom
             Accord.Math.FourierTransform.FFT2(complices, FourierTransform.Direction.Forward);
 
             _backgroundWorker.ReportProgress(-3);
-
+            
             for (int x = 0; x < n / 2; x++)
             {
                 for (int y = 0; y < n / 2; y++)
                 {
-                    if (frequences == 0 && (x < r || y < r))
+                    if (frequences == 0 && (Math.Sqrt(x*x + y*y) < r))
                     {
                         complices[x, y] *= koef;
                         complices[n - 1 - x, y] *= koef;
                         complices[x, n - 1 - y] *= koef;
                         complices[n - 1 - x, n - 1 - y] *= koef;
                     }
-                    if (frequences == 1 && (x > r || y > r))
+                    if (frequences == 1 && (Math.Sqrt(x * x + y * y) > r))
                     {
                         complices[x, y] *= koef;
                         complices[n - 1 - x, y] *= koef;

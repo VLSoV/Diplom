@@ -71,6 +71,7 @@ namespace Diplom
         }
         private void close_img_Click(object sender, RoutedEventArgs e)
         {
+            if (_images.Count == 0) return;
             _images.RemoveAt(_index_now);
             if (_index_now == _images.Count)
                 _index_now--;
@@ -95,6 +96,7 @@ namespace Diplom
         {
             if (_images.Count == 0)
             {
+                txt_is_empty.Visibility = Visibility.Visible;
                 close_img.IsEnabled = false;
                 save_img.IsEnabled = false;
                 menu_transform.IsEnabled = false;
@@ -102,6 +104,7 @@ namespace Diplom
             }
             else
             {
+                txt_is_empty.Visibility = Visibility.Hidden;
                 close_img.IsEnabled = true;
                 save_img.IsEnabled = true;
                 menu_transform.IsEnabled = true;
@@ -111,12 +114,14 @@ namespace Diplom
 
         private void button_last_img_Click(object sender, RoutedEventArgs e)
         {
+            if (_images.Count == 0 || _index_now == 0) return;
             _index_now--;
             _img_now.Source = _images[_index_now].Source;
             check_index();
         }
         private void button_next_img_Click(object sender, RoutedEventArgs e)
         {
+            if (_images.Count == 0 || _index_now == _images.Count-1) return;
             _index_now++;
             _img_now.Source = _images[_index_now].Source;
             check_index();
